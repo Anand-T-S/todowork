@@ -22,3 +22,17 @@ class TodoListView(View):
     def get(self,request):
         all_todos=todos
         return render(request,"todolist.html",{"todos":all_todos})
+
+class TodoFindView(View):
+    def get(self,request):
+        return render(request,"todo_detail.html")
+    def post(self,request):
+        id=int(request.POST.get("t_id"))
+        todo=[todo for todo in todos if todo["id"]==id][0]
+        return render(request,"todo_detail.html",{"todo":todo})
+
+class TodoDetailView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs["id"]
+        todo=[todo for todo in todos if todo["id"]==id][0]
+        return render(request,"details.html",{"todo":todo})
