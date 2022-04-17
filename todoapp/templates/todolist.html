@@ -14,14 +14,16 @@
 <body>
 <div class="container">
     <div class="row">
-        <col-1></col-1>
-        <col-10>
+        <div class="col-1"></div>
+
+        <div class="col-10">
             <table class="table">
                 <tr>
                     <th>Id</th>
                     <th>UserId</th>
                     <th>Title</th>
                     <th>Completed</th>
+                    <th>Action</th>
                 </tr>
 
                 {%for todo in todos%}
@@ -36,17 +38,15 @@
                     <td>{{todo.completed}}</td>
                     <td>
                         <a href="{%url 'details' todo.id%}" class="btn btn-outline-warning">View</a>
-                        <a href="" class="btn btn-outline-primary">Edit</a>
+                        <a href="{%url 'changetodo' todo.id%}" class="btn btn-outline-primary">Edit</a>
                     </td>
                 </tr>
 
-
                 {%endfor%}
 
-
             </table>
-        </col-10>
-        <col-1></col-1>
+        </div>
+        <div class="col-1"></div>
     </div>
 </div>
 </body>

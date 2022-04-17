@@ -36,3 +36,14 @@ class TodoDetailView(View):
         id=kwargs["id"]
         todo=[todo for todo in todos if todo["id"]==id][0]
         return render(request,"details.html",{"todo":todo})
+
+class TodoEditView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get("id")
+        todo=[todo for todo in todos if todo["id"]==id][0]
+        form=TodoForm(initial={"task_name":todo["title"],
+                               "user":todo["userId"],
+                               "completed_status":todo["completed"]
+
+        })
+        return render(request,"todo_edit.html",{"form":form})

@@ -1,7 +1,7 @@
 from django import forms
 
 class TodoForm(forms.Form):
-    task_name=forms.CharField()
-    user=forms.CharField()
-    date=forms.DateField()
+    task_name=forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
+    user=forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
+    date=forms.DateField(widget=forms.DateInput(attrs={"class":"form-control","type":"date"}))
     completed_status=forms.BooleanField()
