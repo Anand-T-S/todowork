@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from todoapp.forms import TodoForm
 from django.views.generic import View
-from .models import todos
+todos=[
+
+]
 
 
 # Create your views here.
