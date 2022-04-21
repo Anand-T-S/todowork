@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from todoapp.forms import TodoForm
 from django.views.generic import View
+from todoapp.models import Todos
 todos=[
 
 ]
@@ -16,13 +17,19 @@ class TodoCreateView(View):
         form=TodoForm(request.POST)
         if form.is_valid():
             print(form.cleaned_data)
-            return render(request,"addtodo.html",{"form":form})
+            Todos.objects.create(
+                task_name=form.cleaned_data.get("task_name"),
+                user=form.cleaned_data.get("user"),
+                status=form.cleaned_data.get("status")
+            )
+            print("Todo Created")
+            return redirect("alltodos")
         else:
             return render(request,"addtodo.html",{"form":form})
 
 class TodoListView(View):
     def get(self,request):
-        all_todos=todos
+        all_todos=Todos.objects.all()
         return render(request,"todolist.html",{"todos":all_todos})
 
 class TodoFindView(View):
@@ -36,7 +43,7 @@ class TodoFindView(View):
 class TodoDetailView(View):
     def get(self,request,*args,**kwargs):
         id=kwargs["id"]
-        todo=[todo for todo in todos if todo["id"]==id][0]
+        todo=Todos.objects.get(id=id)
         return render(request,"details.html",{"todo":todo})
 
 class TodoEditView(View):
