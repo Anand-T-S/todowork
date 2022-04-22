@@ -16,12 +16,13 @@ class TodoCreateView(View):
     def post(self,request):
         form=TodoForm(request.POST)
         if form.is_valid():
-            print(form.cleaned_data)
-            Todos.objects.create(
-                task_name=form.cleaned_data.get("task_name"),
-                user=form.cleaned_data.get("user"),
-                status=form.cleaned_data.get("status")
-            )
+            # print(form.cleaned_data)
+            # Todos.objects.create(
+            #     task_name=form.cleaned_data.get("task_name"),
+            #     user=form.cleaned_data.get("user"),
+            #     status=form.cleaned_data.get("status")
+            # )
+            form.save()
             print("Todo Created")
             return redirect("alltodos")
         else:
@@ -49,10 +50,19 @@ class TodoDetailView(View):
 class TodoEditView(View):
     def get(self,request,*args,**kwargs):
         id=kwargs.get("id")
-        todo=[todo for todo in todos if todo["id"]==id][0]
-        form=TodoForm(initial={"task_name":todo["title"],
-                               "user":todo["userId"],
-                               "completed_status":todo["completed"]
-
-        })
+        todo=Todos.objects.get(id=id)
+        form=TodoForm(instance=todo)
         return render(request,"todo_edit.html",{"form":form})
+    def post(self,request,*args,**kwargs):
+        id=kwargs.get("id")
+        todo=Todos.objects.get(id=id)
+        form=TodoForm(request.POST,instance=todo)
+        if form.is_valid():
+            form.save()
+            return redirect("iry")
+class TodoDeleteView(View):
+    def get(self,request,*args,**kwargs):
+        id=kwargs.get("id")
+        todo=Todos.objects.get(id=id)
+        todo.delete()
+        return redirect("alltodos")

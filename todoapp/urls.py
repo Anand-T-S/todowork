@@ -8,4 +8,5 @@ urlpatterns=[
     path("find",views.TodoFindView.as_view(),name="findtodo"),
     path("details/<int:id>",views.TodoDetailView.as_view(),name="details"),
     path("change/<int:id>",views.TodoEditView.as_view(),name="changetodo"),
+    path("remove/<int:id>",views.TodoDeleteView.as_view(),name="removetodo"),
 ]

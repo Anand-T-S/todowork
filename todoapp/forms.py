@@ -1,11 +1,18 @@
 from django import forms
+from todoapp.models import Todos
 
-class TodoForm(forms.Form):
-    task_name=forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
-    user=forms.CharField(widget=forms.TextInput(attrs={"class":"form-control"}))
+class TodoForm(forms.ModelForm):
+
     # date=forms.DateField(widget=forms.DateInput(attrs={"class":"form-control","type":"date"}))
     options=(
         (True,True),
         (False,False)
     )
     status=forms.ChoiceField(choices=options)
+    class Meta:
+        model=Todos
+        fields=[
+            "task_name",
+            "user",
+            "status"
+        ]
