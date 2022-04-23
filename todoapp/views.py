@@ -59,7 +59,7 @@ class TodoEditView(View):
         form=TodoForm(request.POST,instance=todo)
         if form.is_valid():
             form.save()
-            return redirect("iry")
+            return redirect("alltodos")
 class TodoDeleteView(View):
     def get(self,request,*args,**kwargs):
         id=kwargs.get("id")
