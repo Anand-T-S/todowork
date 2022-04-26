@@ -16,3 +16,8 @@ class TodoForm(forms.ModelForm):
             "user",
             "status"
         ]
+        widgets={
+            "task_name":forms.TextInput(attrs={"class":"form-control"}),
+            "user":forms.TextInput(attrs={"class":"form-control"}),
+            "status":forms.CheckboxInput(attrs={"class":"form-control"})
+        }
