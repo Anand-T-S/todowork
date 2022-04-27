@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from todoapp.forms import TodoForm
+from todoapp.forms import TodoForm,UserRegistrationForm
 from django.views.generic import View
 from todoapp.models import Todos
 todos=[
@@ -70,3 +70,15 @@ class TodoDeleteView(View):
         todo=Todos.objects.get(id=id)
         todo.delete()
         return redirect("alltodos")
+
+class SignUpView(View):
+    template_name="register.html"
+    def get(self,request,*args,**kwargs):
+        form=UserRegistrationForm()
+        return render(request,self.template_name,{"form":form})
+    def post(self,request,*args,**kwargs):
+        form=UserRegistrationForm(request.POST)
+        if not form.is_valid():
+            return render(request,self.template_name,{"form":form})
+        form.save()
+        return render(request,"login.html")
