@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
-from todoapp.forms import TodoForm,UserRegistrationForm
+from todoapp.forms import TodoForm,UserRegistrationForm,LoginForm
 from django.views.generic import View
 from todoapp.models import Todos
+from django.contrib.auth import authenticate,login,logout
 todos=[
 
 ]
@@ -81,4 +82,27 @@ class SignUpView(View):
         if not form.is_valid():
             return render(request,self.template_name,{"form":form})
         form.save()
-        return render(request,"login.html")
+        return redirect("signin")
+
+class SignInView(View):
+    def get(self,request,*args,**kwargs):
+        form=LoginForm()
+        return render(request,"login.html",{"form":form})
+    def post(self,request,*args,**kwargs):
+        form=LoginForm(request.POST)
+        if form.is_valid():
+            username=form.cleaned_data.get("username")
+            password=form.cleaned_data.get("password")
+            user=authenticate(request,username=username,password=password)
+            if user:
+                login(request, user)
+                print("login success")
+                return redirect("alltodos")
+            else:
+                print("login failed")
+                return redirect("signin")
+
+def signout(request,*args,**kwargs):
+    logout(request)
+    return redirect("signin")
+

@@ -9,5 +9,7 @@ urlpatterns=[
     path("details/<int:id>",views.TodoDetailView.as_view(),name="details"),
     path("change/<int:id>",views.TodoEditView.as_view(),name="changetodo"),
     path("remove/<int:id>",views.TodoDeleteView.as_view(),name="removetodo"),
-    path("accounts/signup",views.SignUpView.as_view(),name="signup")
+    path("accounts/signup",views.SignUpView.as_view(),name="signup"),
+    path("",views.SignInView.as_view(),name="signin"),
+    path("accounts/signout",views.signout,name="signout"),
 ]

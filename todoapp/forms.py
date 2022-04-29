@@ -10,7 +10,7 @@ class TodoForm(forms.ModelForm):
         (True,True),
         (False,False)
     )
-    status=forms.ChoiceField(choices=options)
+    status=forms.ChoiceField(choices=options,widget=forms.Select(attrs={"class":"form-select"}))
     class Meta:
         model=Todos
         fields=[
@@ -21,7 +21,6 @@ class TodoForm(forms.ModelForm):
         widgets={
             "task_name":forms.TextInput(attrs={"class":"form-control"}),
             "user":forms.TextInput(attrs={"class":"form-control"}),
-            "status":forms.CheckboxInput(attrs={"class":"form-control"})
         }
 
 class UserRegistrationForm(UserCreationForm):
@@ -35,3 +34,7 @@ class UserRegistrationForm(UserCreationForm):
             "password1",
             "password2"
         ]
+
+class LoginForm(forms.Form):
+    username=forms.CharField()
+    password=forms.CharField(widget=forms.PasswordInput)
