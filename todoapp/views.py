@@ -37,12 +37,15 @@ class TodoListView(View):
 
 class TodoFindView(View):
     template_name="todo_detail.html"
-    def get(self,request):
+    def get(self,request,*args,**kwargs):
         return render(request,self.template_name)
-    def post(self,request):
-        id=int(request.POST.get("t_id"))
-        todo=[todo for todo in todos if todo["id"]==id][0]
+    def post(self,request,*args,**kwargs):
+        id=kwargs.get("id")
+        todo=Todos.objects.get(id=id)
         return render(request,self.template_name,{"todo":todo})
+        # id=int(request.POST.get("t_id"))
+        # todo=[todo for todo in todos if todo["id"]==id][0]
+        # return render(request,self.template_name,{"todo":todo})
 
 class TodoDetailView(View):
     def get(self,request,*args,**kwargs):
@@ -97,7 +100,7 @@ class SignInView(View):
             if user:
                 login(request, user)
                 print("login success")
-                return redirect("alltodos")
+                return redirect("hometodo")
             else:
                 print("login failed")
                 return redirect("signin")
@@ -105,4 +108,7 @@ class SignInView(View):
 def signout(request,*args,**kwargs):
     logout(request)
     return redirect("signin")
+
+def home(request,*args,**kwargs):
+    return render(request,"home.html")
 

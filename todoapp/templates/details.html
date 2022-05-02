@@ -3,18 +3,33 @@
 {%block body_block%}
 <div class="container">
     <div class="row">
-        <div class="col-4"></div>
-        <div class="col-4">
-            <div class="card" style="width: 18rem;">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item"><i>id :-</i>{{todo.id}}</li>
-                    <li class="list-group-item"><i>user :-</i>{{todo.user}}</li>
-                    <li class="list-group-item"><i>task name :-</i>{{todo.task_name}}</li>
-                    <li class="list-group-item"><i>status :-</i>{{todo.status}}</li>
-                </ul>
-            </div>
+        <div class="col-1"></div>
+        <div class="col-10">
+            <table class="table table-hover">
+                <tr>
+                    <th>Id</th>
+                    <th>User</th>
+                    <th>Task Name</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>{{todo.id}}</td>
+                    <td>{{todo.user}}</td>
+                    <td>{{todo.task_name}}</td>
+                    <td>{{todo.status}}</td>
+                </tr>
+
+            </table>
+<!--            <div class="card" style="width: 18rem;">-->
+<!--                <ul class="list-group list-group-flush">-->
+<!--                    <li class="list-group-item"><i>id :-</i>{{todo.id}}</li>-->
+<!--                    <li class="list-group-item"><i>user :-</i>{{todo.user}}</li>-->
+<!--                    <li class="list-group-item"><i>task name :-</i>{{todo.task_name}}</li>-->
+<!--                    <li class="list-group-item"><i>status :-</i>{{todo.status}}</li>-->
+<!--                </ul>-->
+<!--            </div>-->
         </div>
-        <div class="col-4"></div>
+        <div class="col-1"></div>
     </div>
 </div>
 
