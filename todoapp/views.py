@@ -3,6 +3,8 @@ from todoapp.forms import TodoForm,UserRegistrationForm,LoginForm
 from django.views.generic import View
 from todoapp.models import Todos
 from django.contrib.auth import authenticate,login,logout
+from django.utils.decorators import method_decorator
+from todoapp.decorators import sigin_required
 todos=[
 
 ]
@@ -10,6 +12,7 @@ todos=[
 
 # Create your views here.
 
+@method_decorator(sigin_required,name="dispatch")
 class TodoCreateView(View):
     template_name="addtodo.html"
     def get(self,request):
@@ -24,17 +27,20 @@ class TodoCreateView(View):
             #     user=form.cleaned_data.get("user"),
             #     status=form.cleaned_data.get("status")
             # )
+            form.instance.user=request.user
             form.save()
             print("Todo Created")
             return redirect("alltodos")
         else:
             return render(request,self.template_name,{"form":form})
 
+@method_decorator(sigin_required,name="dispatch")
 class TodoListView(View):
     def get(self,request):
         all_todos=Todos.objects.all()
         return render(request,"todolist.html",{"todos":all_todos})
 
+@method_decorator(sigin_required,name="dispatch")
 class TodoFindView(View):
     template_name="todo_detail.html"
     def get(self,request,*args,**kwargs):
@@ -47,12 +53,14 @@ class TodoFindView(View):
         # todo=[todo for todo in todos if todo["id"]==id][0]
         # return render(request,self.template_name,{"todo":todo})
 
+@method_decorator(sigin_required,name="dispatch")
 class TodoDetailView(View):
     def get(self,request,*args,**kwargs):
         id=kwargs.get("id")
         todo=Todos.objects.get(id=id)
         return render(request,"details.html",{"todo":todo})
 
+@method_decorator(sigin_required,name="dispatch")
 class TodoEditView(View):
     def get_object(self,id):
         return Todos.objects.get(id=id)
@@ -68,6 +76,8 @@ class TodoEditView(View):
         if form.is_valid():
             form.save()
             return redirect("alltodos")
+
+@method_decorator(sigin_required,name="dispatch")
 class TodoDeleteView(View):
     def get(self,request,*args,**kwargs):
         id=kwargs.get("id")
@@ -105,10 +115,12 @@ class SignInView(View):
                 print("login failed")
                 return redirect("signin")
 
+@sigin_required
 def signout(request,*args,**kwargs):
     logout(request)
     return redirect("signin")
 
+@sigin_required
 def home(request,*args,**kwargs):
     return render(request,"home.html")
 
