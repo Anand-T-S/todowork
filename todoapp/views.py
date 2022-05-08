@@ -37,7 +37,7 @@ class TodoCreateView(View):
 @method_decorator(sigin_required,name="dispatch")
 class TodoListView(View):
     def get(self,request):
-        all_todos=Todos.objects.all()
+        all_todos=Todos.objects.filter(user=request.user)
         return render(request,"todolist.html",{"todos":all_todos})
 
 @method_decorator(sigin_required,name="dispatch")
