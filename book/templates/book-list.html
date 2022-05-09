@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>list</title>
+</head>
+<body>
+<div class="container">
+  <div class="row">
+    <div class="col-4"></div>
+    <div class="col-4">
+      {%for book in books%}
+      <div>
+        {{book.book_name}}
+        {{book.author}}
+        {{book.price}}
+        {{book.pages}}
+        <a href="{%url 'book-detail' book.id%}">Detail</a>
+        <a href="{%url 'book-change' book.id%}">Edit</a>
+        <a href="{%url 'book-delete' book.id%}">Delete</a>
+      </div>
+      {%endfor%}
+    </div>
+    <div class="col-4"></div>
+  </div>
+</div>
+
+</body>
+</html>

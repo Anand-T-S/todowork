@@ -20,4 +20,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('todoapp.urls')),
     path('countries/',include('countries.urls')),
+    path('books/',include('book.urls')),
 ]
