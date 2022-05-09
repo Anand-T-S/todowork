@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from todoapp.forms import TodoForm,UserRegistrationForm,LoginForm
-from django.views.generic import View
+from django.views.generic import View,ListView,DetailView,UpdateView
+from django.urls import reverse_lazy
 from todoapp.models import Todos
 from django.contrib.auth import authenticate,login,logout
 from django.utils.decorators import method_decorator
@@ -35,10 +36,15 @@ class TodoCreateView(View):
             return render(request,self.template_name,{"form":form})
 
 @method_decorator(sigin_required,name="dispatch")
-class TodoListView(View):
-    def get(self,request):
-        all_todos=Todos.objects.filter(user=request.user)
-        return render(request,"todolist.html",{"todos":all_todos})
+class TodoListView(ListView):
+    # def get(self,request):
+    #     all_todos=Todos.objects.filter(user=request.user)
+    #     return render(request,"todolist.html",{"todos":all_todos})
+    model = Todos
+    template_name = "todolist.html"
+    context_object_name = "todos"
+    def get_queryset(self):
+        return Todos.objects.filter(user=self.request.user)
 
 @method_decorator(sigin_required,name="dispatch")
 class TodoFindView(View):
@@ -54,28 +60,37 @@ class TodoFindView(View):
         # return render(request,self.template_name,{"todo":todo})
 
 @method_decorator(sigin_required,name="dispatch")
-class TodoDetailView(View):
-    def get(self,request,*args,**kwargs):
-        id=kwargs.get("id")
-        todo=Todos.objects.get(id=id)
-        return render(request,"details.html",{"todo":todo})
+class TodoDetailView(DetailView):
+    # def get(self,request,*args,**kwargs):
+    #     id=kwargs.get("id")
+    #     todo=Todos.objects.get(id=id)
+    #     return render(request,"details.html",{"todo":todo})
+    model = Todos
+    template_name = "details.html"
+    context_object_name = "todo"
+    pk_url_kwarg = "id"
 
 @method_decorator(sigin_required,name="dispatch")
-class TodoEditView(View):
-    def get_object(self,id):
-        return Todos.objects.get(id=id)
-    def get(self,request,*args,**kwargs):
-        id=kwargs.get("id")
-        todo=self.get_object(id)
-        form=TodoForm(instance=todo)
-        return render(request,"todo_edit.html",{"form":form})
-    def post(self,request,*args,**kwargs):
-        id=kwargs.get("id")
-        todo=self.get_object(id)
-        form=TodoForm(request.POST,instance=todo)
-        if form.is_valid():
-            form.save()
-            return redirect("alltodos")
+class TodoEditView(UpdateView):
+    model = Todos
+    template_name = "todo_edit.html"
+    form_class = TodoForm
+    success_url = reverse_lazy("alltodos")
+    pk_url_kwarg = "id"
+    # def get_object(self,id):
+    #     return Todos.objects.get(id=id)
+    # def get(self,request,*args,**kwargs):
+    #     id=kwargs.get("id")
+    #     todo=self.get_object(id)
+    #     form=TodoForm(instance=todo)
+    #     return render(request,"todo_edit.html",{"form":form})
+    # def post(self,request,*args,**kwargs):
+    #     id=kwargs.get("id")
+    #     todo=self.get_object(id)
+    #     form=TodoForm(request.POST,instance=todo)
+    #     if form.is_valid():
+    #         form.save()
+    #         return redirect("alltodos")
 
 @method_decorator(sigin_required,name="dispatch")
 class TodoDeleteView(View):
