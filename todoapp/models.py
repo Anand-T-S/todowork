@@ -13,6 +13,13 @@ class Todos(models.Model):
     return self.task_name
 
 
+
+class UserProfile(models.Model):
+  user=models.OneToOneField(User,on_delete=models.CASCADE,related_name="profile")
+  profile_pic=models.ImageField(upload_to="images")
+  date_of_birth=models.DateField(null=True)
+  phone=models.CharField(max_length=12)
+
 #ORM queries
 #object -relational mapper
 #ORM query for creating resource

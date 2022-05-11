@@ -12,5 +12,7 @@ urlpatterns=[
     path("accounts/signup",views.SignUpView.as_view(),name="signup"),
     path("",views.SignInView.as_view(),name="signin"),
     path("accounts/signout",views.signout,name="signout"),
-    path("home",views.home,name="hometodo",)
+    path("home",views.home,name="hometodo"),
+    path("profile",views.ProfileCreateView.as_view(),name="profile"),
+    path("viewprofile/<int:id>",views.ViewProfile.as_view(),name="viewprofile")
 ]
