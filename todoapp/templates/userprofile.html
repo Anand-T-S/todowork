@@ -6,8 +6,8 @@
     <div class="row">
         <div class="col-4"></div>
         <div class="col-4">
-            <h1>Create Todo</h1>
-            <form action="" method="post">
+            <h1>Profile Form</h1>
+            <form action="" method="post" enctype="multipart/form-data">
                 {%csrf_token%}
                 {{form.as_p}}
                 <input type="submit" class="btn-grad" value="Add">
