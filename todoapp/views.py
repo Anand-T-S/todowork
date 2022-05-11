@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect
-from todoapp.forms import TodoForm,UserRegistrationForm,LoginForm
-from django.views.generic import View,ListView,DetailView,UpdateView
+from todoapp.forms import TodoForm,UserRegistrationForm,LoginForm,TodoUpdateForm,UserProfileForm
+from django.views.generic import View,ListView,DetailView,UpdateView,CreateView
 from django.urls import reverse_lazy
-from todoapp.models import Todos
+from todoapp.models import Todos,UserProfile
 from django.contrib.auth import authenticate,login,logout
 from django.utils.decorators import method_decorator
 from todoapp.decorators import sigin_required
@@ -14,26 +14,34 @@ todos=[
 # Create your views here.
 
 @method_decorator(sigin_required,name="dispatch")
-class TodoCreateView(View):
-    template_name="addtodo.html"
-    def get(self,request):
-        form=TodoForm()
-        return render(request,self.template_name,{"form":form})
-    def post(self,request):
-        form=TodoForm(request.POST)
-        if form.is_valid():
-            # print(form.cleaned_data)
-            # Todos.objects.create(
-            #     task_name=form.cleaned_data.get("task_name"),
-            #     user=form.cleaned_data.get("user"),
-            #     status=form.cleaned_data.get("status")
-            # )
-            form.instance.user=request.user
-            form.save()
-            print("Todo Created")
-            return redirect("alltodos")
-        else:
-            return render(request,self.template_name,{"form":form})
+class TodoCreateView(CreateView):
+    model = Todos
+    form_class = TodoForm
+    template_name = "addtodo.html"
+    success_url = reverse_lazy("alltodos")
+    # template_name="addtodo.html"
+    # def get(self,request):
+    #     form=TodoForm()
+    #     return render(request,self.template_name,{"form":form})
+    # def post(self,request):
+    #     form=TodoForm(request.POST)
+    #     if form.is_valid():
+    #         # print(form.cleaned_data)
+    #         # Todos.objects.create(
+    #         #     task_name=form.cleaned_data.get("task_name"),
+    #         #     user=form.cleaned_data.get("user"),
+    #         #     status=form.cleaned_data.get("status")
+    #         # )
+    #         form.instance.user=request.user
+    #         form.save()
+    #         print("Todo Created")
+    #         return redirect("alltodos")
+    #     else:
+    #         return render(request,self.template_name,{"form":form})
+
+    def form_valid(self, form):
+        form.instance.user=self.request.user
+        return super().form_valid(form)
 
 @method_decorator(sigin_required,name="dispatch")
 class TodoListView(ListView):
@@ -44,7 +52,7 @@ class TodoListView(ListView):
     template_name = "todolist.html"
     context_object_name = "todos"
     def get_queryset(self):
-        return Todos.objects.filter(user=self.request.user)
+        return Todos.objects.filter(user=self.request.user,status=False)
 
 @method_decorator(sigin_required,name="dispatch")
 class TodoFindView(View):
@@ -74,7 +82,7 @@ class TodoDetailView(DetailView):
 class TodoEditView(UpdateView):
     model = Todos
     template_name = "todo_edit.html"
-    form_class = TodoForm
+    form_class = TodoUpdateForm
     success_url = reverse_lazy("alltodos")
     pk_url_kwarg = "id"
     # def get_object(self,id):
@@ -139,3 +147,19 @@ def signout(request,*args,**kwargs):
 def home(request,*args,**kwargs):
     return render(request,"home.html")
 
+@method_decorator(sigin_required,name="dispatch")
+class ProfileCreateView(CreateView):
+    model = UserProfile
+    form_class = UserProfileForm
+    template_name = "userprofile.html"
+    success_url = reverse_lazy("alltodos")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+class ViewProfile(DetailView):
+    model = UserProfile
+    template_name = "viewprofile.html"
+    context_object_name = "profile"
+    pk_url_kwarg = "id"
